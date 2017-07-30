@@ -44,19 +44,67 @@
             $("a").replaceWith(function() {
                 return $("<span>" + $(this).html() + "</span>");
             });
-            
+
             // Get full resolution of image
             // $("img").replaceWith(function() {
             //     return $("<img src =" + $(this).attr('src').replace(/\/thumb|\/\d+px.*$/g, '') + ">" + "</span>");
             // });
         },
-        
+
         /**
          * Parses the content into various sections
-         * Supported sections - Thumbnail, paragraphs, h3, h2
+         * Supported sections - Thumbnail, paragraphs, blockquote, h2, h3, h4
+         * Other sections: Div, Table, ul
          */
-        getSections: function(){
-           $('')  
+        getSections: function() {
+
+            var sections = [{
+                index: 1,
+                type: 'h3',
+                text: this.getTitle(),
+                subSections: []
+            }];
+
+            var i = 0;
+
+            var currSection = sections[i];
+
+            $('.mw-parser-output').children().each(function() {
+                var el = $(this);
+                var nodeName = el.prop('nodeName').toLowerCase();
+
+                if (!el.is(':empty')) {
+                    console.log(nodeName);
+                    switch (nodeName) {
+                        case 'p':
+                        case 'h3':
+                        case 'h4':
+                        case 'blockquote':
+                            currSection.subSections.push({
+                                type: nodeName,
+                                text: el.text()
+                            });
+                            break;
+                        case 'h2':
+                            sections.push({
+                                type: 'h2',
+                                text: el.text(),
+                                subSections: []
+                            });
+
+                            currSection = sections[++i];
+                            break;
+                            // Store the html
+                        default:
+                            currSection.subSections.push({
+                                type: nodeName,
+                                text: el.html()
+                            });
+                    }
+                }
+            });
+
+            return sections;
         },
 
         /**
@@ -70,9 +118,9 @@
                 console.log(err);
             }
         },
-        
-        getMainImage: function(){
-            
+
+        getMainImage: function() {
+
         },
 
         /**
@@ -81,7 +129,12 @@
         parse: function(body) {
             this.setDom(body);
             this.sanitize();
-            return $.html();
+            //return $.html();
+            return {
+                title: this.getTitle(),
+                mainImg: this.getMainImage(),
+                sections: this.getSections()
+            }
         }
     };
 
