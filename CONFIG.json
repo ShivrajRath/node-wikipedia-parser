@@ -1,0 +1,8 @@
+{
+    "ERR": {
+        "No_URL": {
+            "ERR_ID": "ERR_001",
+            "description": "URL could not be found"
+        }
+    }
+}

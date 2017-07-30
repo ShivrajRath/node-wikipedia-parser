@@ -1,0 +1,20 @@
+{
+  "name": "wikipedia-parser",
+  "version": "1.0.0",
+  "description": "Parse a wikipedia page into sections/paragraphs/images/tables etc",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "wikipedia",
+    "parse"
+  ],
+  "author": "ShivrajRath",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "express": "^4.15.3",
+    "request": "^2.81.0"
+  }
+}
