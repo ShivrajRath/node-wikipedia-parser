@@ -46,9 +46,9 @@
             });
 
             // Get full resolution of image
-            // $("img").replaceWith(function() {
-            //     return $("<img src =" + $(this).attr('src').replace(/\/thumb|\/\d+px.*$/g, '') + ">" + "</span>");
-            // });
+            $("img").replaceWith(function() {
+                return $("<img src =" + $(this).attr('src').replace(/\/thumb|\/\d+px.*$/g, '') + ">" + "</span>");
+            });
         },
 
         /**
@@ -72,9 +72,8 @@
             $('.mw-parser-output').children().each(function() {
                 var el = $(this);
                 var nodeName = el.prop('nodeName').toLowerCase();
-
-                if (!el.is(':empty')) {
-                    console.log(nodeName);
+                var text = el.text().trim();
+                if (text) {
                     switch (nodeName) {
                         case 'p':
                         case 'h3':
@@ -82,13 +81,13 @@
                         case 'blockquote':
                             currSection.subSections.push({
                                 type: nodeName,
-                                text: el.text()
+                                text: text
                             });
                             break;
                         case 'h2':
                             sections.push({
                                 type: 'h2',
-                                text: el.text(),
+                                text: text,
                                 subSections: []
                             });
 
@@ -96,10 +95,33 @@
                             break;
                             // Store the html
                         default:
-                            currSection.subSections.push({
-                                type: nodeName,
-                                text: el.html()
-                            });
+                            // Thumbnail humbnails case
+                            if (el.hasClass('thumb')) {
+                                // Multiple caption image
+                                if (el.hasClass('tmulti')) {
+                                    el.find('tsingle').each(function() {
+                                        currSection.subSections.push({
+                                            type: 'img',
+                                            src: $(this).find('img').attr('src'),
+                                            caption: $(this).find('.thumbcaption').text().trim()
+                                        });
+                                    });
+                                }
+                                else {
+                                    currSection.subSections.push({
+                                        type: 'img',
+                                        src: el.find('img').attr('src'),
+                                        caption: el.find('.thumbcaption').text()
+                                    });
+                                }
+                            }
+                            else {
+                                currSection.subSections.push({
+                                    isHTML: true,
+                                    type: nodeName,
+                                    text: el.html()
+                                });
+                            }
                     }
                 }
             });
@@ -134,7 +156,7 @@
                 title: this.getTitle(),
                 mainImg: this.getMainImage(),
                 sections: this.getSections()
-            }
+            };
         }
     };
 
