@@ -1,17 +1,19 @@
-var express = require('express');
+var express = require('express'),
+    parser = require('./parser'),
+    config = require('./CONFIG.json');
+
 var app = express();
-var parser = require('./parser');
 
-app.get('/', function(req, res) {
-
-    var url = 'https://en.wikipedia.org/w/index.php?title=History_of_India&printable=yes';
-    
-    parser.parse(url, function(parsedData){
+/**
+ * Exposes an API to retrieve wikipedia object from the page title
+ */
+app.get('/getWikiObj/:title', function(req, res) {
+    parser.parse(req.params.title, function(parsedData) {
         res.send(parsedData);
     });
-    
 });
 
-var port = process.env.PORT || 3000;
+// Start the app
+var port = process.env.PORT || config.PORT;
 app.listen(port);
 console.info('Application started on port: ' + port);

@@ -162,11 +162,12 @@
 
     // Public
     module.exports = {
-        parse: function(url, func) {
-            if (!url) {
-                func(config.err.No_URL);
+        parse: function(title, func) {
+            if (!title) {
+                func(config.err.No_Title);
             }
             else {
+                var url = 'https://en.wikipedia.org/w/index.php?title=' + title + '&printable=yes';
                 request(url, function(error, response, body) {
                     if (error) {
                         func(error);

@@ -1,18 +1,15 @@
+## Wikipedia parser
 
-     ,-----.,--.                  ,--. ,---.   ,--.,------.  ,------.
-    '  .--./|  | ,---. ,--.,--. ,-|  || o   \  |  ||  .-.  \ |  .---'
-    |  |    |  || .-. ||  ||  |' .-. |`..'  |  |  ||  |  \  :|  `--, 
-    '  '--'\|  |' '-' ''  ''  '\ `-' | .'  /   |  ||  '--'  /|  `---.
-     `-----'`--' `---'  `----'  `---'  `--'    `--'`-------' `------'
-    ----------------------------------------------------------------- 
+This aims to parse a wikipedia page into structured machine readable object.
 
+## Usage
 
-Hi there! Welcome to Cloud9 IDE!
+```javascript
+    var parser = require('./parser');
+    parser.parse(title, function(parsedObj) {
+        // Do whatever with parsedObj
+    });
+```
 
-To get you started, create some files, play with the terminal,
-or visit http://docs.c9.io for our documentation.
-If you want, you can also go watch some training videos at
-http://www.youtube.com/user/c9ide.
-
-Happy coding!
-The Cloud9 IDE team
+## Dependencies
+It uses ```request``` and ```cheerio```  npm packages to make http call and parse the DOM.
